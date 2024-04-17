@@ -154,8 +154,8 @@ const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1, // this removes the field from document
       },
     },
     {
@@ -172,7 +172,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged Out"));
+    .json(new ApiResponse(200, {}, "User logged Out Successfully"));
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -453,8 +453,6 @@ const getWatchHistory = asyncHandler(async (req, res) => {
       )
     );
 });
-
-
 
 export {
   registerUser,
